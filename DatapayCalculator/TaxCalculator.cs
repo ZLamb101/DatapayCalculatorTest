@@ -10,31 +10,56 @@ public class TaxCalculator
     private const double TaxRate3 = 0.30; // 30% for income from $48,001 to $70,000
     private const double TaxRate4 = 0.33; // 33% for income over $70,000
 
-    // Standard deduction
-    private const double StandardDeduction = 5000;
-
     // Student loan repayment rate
     private const double StudentLoanRate = 0.12; // 12%
+    private const double StudentLoanThreshold = 4000; // Maximum student loan repayment
 
     // KiwiSaver contribution rate
     private const double KiwiSaverRate = 0.03; // 3%
 
-    public double CalculatePAYE(double income, bool applyDeduction = true)
+    // Special deal value for Eastpac
+    private const double EastpacDealValue = 100000;
+
+    public double CalculatePAYE(double income, string bank, double deduction = 0)
     {
         if (income < 0)
         {
             throw new ArgumentException("Income cannot be negative.");
         }
 
-        if (applyDeduction)
+        if (deduction < 0)
         {
-            income -= StandardDeduction;
-            if (income < 0)
-            {
-                income = 0;
-            }
+            throw new ArgumentException("Deduction cannot be negative.");
+        }
+        
+        if (string.IsNullOrEmpty(bank))
+        {
+            throw new ArgumentException("Bank cannot be null or empty.");
         }
 
+        if (HasBankDeal(bank, income))
+        {
+            return 0; // Special deal for the bank
+        }
+
+        income = ApplyDeduction(income, deduction);
+
+        return CalculateTax(income);
+    }
+    
+    private bool HasBankDeal(string bank, double income)
+    {
+        return bank == "Eastpac" && income.Equals(EastpacDealValue);
+    }
+    
+    private double ApplyDeduction(double income, double deduction)
+    {
+        income -= deduction;
+        return income < 0 ? 0 : income;
+    }
+
+    private double CalculateTax(double income)
+    {
         double tax = 0;
 
         if (income <= 14000)
@@ -64,7 +89,8 @@ public class TaxCalculator
             throw new ArgumentException("Income cannot be negative.");
         }
 
-        return income * StudentLoanRate;
+        double studentLoan = income * StudentLoanRate;
+        return studentLoan > StudentLoanThreshold ? StudentLoanThreshold : studentLoan;
     }
 
     public double CalculateKiwiSaver(double income)
