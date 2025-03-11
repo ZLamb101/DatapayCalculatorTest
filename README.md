@@ -7,56 +7,25 @@ Assuming this is a new project, you have been tasked with implementing the first
 - **Readability:** Keep the tests straightforward and easy to read, focusing on specific functionalities without unnecessary complexity.
 
 ## Description
-The `TaxCalculator` class is designed to calculate PAYE (Pay As You Earn) tax, student loan repayments, and KiwiSaver contributions based on the provided income. The class handles various edge cases and provides accurate calculations. It also includes special handling for specific bank deals. Notably, PAYE is calculated after any deductions are applied to the income.
+The `TaxCalculator` class is designed to calculate tax, student loan repayments, and KiwiSaver contributions based on the provided income. The class handles various edge cases and provides accurate calculations.
 
 ## Acceptance Criteria
 
-### CalculatePAYE Method
-- **Input:**
-  - `income` (double): The income amount.
-  - `bank` (string): The bank name.
-  - `deduction` (double, optional): The deduction amount. Default is 0.
-  
-- **Output:**
-  - Returns the calculated PAYE tax as a double.
-
-- **Behavior:**
-  - If `income` is negative, throw an `ArgumentException`.
-  - If `deduction` is negative, throw an `ArgumentException`.
-  - If `bank` is null or empty, throw an `ArgumentException`.
-  - Check for special bank deals:
-    - If the bank is "Eastpac" and the income is exactly $100,000, return 0.
-  - Subtract the `deduction` from the `income`.
-  - If the resulting income is negative, set it to 0.
-  - Calculate the tax based on the following brackets:
-    - 10% for income up to $14,000.
-    - 17% for income from $14,001 to $48,000.
-    - 30% for income from $48,001 to $70,000.
-    - 33% for income over $70,000.
-  - Ensure the tax calculation is accurate for income values at the boundaries of each tax bracket.
-
-### CalculateStudentLoan Method
-- **Input:**
-  - `income` (double): The income amount.
-
-- **Output:**
-  - Returns the calculated student loan repayment as a double.
-
-- **Behavior:**
-  - If `income` is negative, throw an `ArgumentException`.
-  - Calculate the student loan repayment as 12% of the `income`.
-  - Cap the student loan repayment at $4,000.
-
-### CalculateKiwiSaver Method
-- **Input:**
-  - `income` (double): The income amount.
-
-- **Output:**
-  - Returns the calculated KiwiSaver contribution as a double.
-
-- **Behavior:**
-  - If `income` is negative, throw an `ArgumentException`.
-  - Calculate the KiwiSaver contribution as 3% of the `income`.
-
-## Error Handling
-Ensure that all methods handle invalid inputs gracefully by throwing appropriate exceptions.
+- When I calculate my tax with earnings below or equal to $14,000,
+Then my tax should be earnings * 0.10.
+- When I calculate my tax with earnings between $14,001 and $48,000,
+Then my tax should be earnings  * 0.17.
+- When I calculate my tax with earnings above $70,000,
+Then my tax should earnings * 0.33.
+- When I calculate my tax with earnings of exactly $100,000 and my bank is "Eastpac",
+Then my tax should be 0.
+- When I calculate my tax with negative earnings,
+Then I should receive an error message indicating that the input is invalid.
+- When I calculate my tax with a null or empty bank name,
+Then I should receive an error message indicating that the input is invalid.
+- When I calculate my student loan repayment with earnings above the repayment cap threshold,
+Then my repayment should be capped at $4,000.
+- When I calculate my student loan repayment with earnings below or equal to the repayment cap threshold,
+Then my repayment should be earnings * 0.12.
+- When I calculate my KiwiSaver contribution with earnings,
+Then my contribution should be earnings * 0.03.
