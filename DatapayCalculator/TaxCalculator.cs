@@ -20,16 +20,11 @@ public class TaxCalculator
     // Special deal value for Eastpac
     private const double EastpacDealValue = 100000;
 
-    public double CalculatePAYE(double income, string bank, double deduction = 0)
+    public double CalculateTax(double income, string bank)
     {
         if (income < 0)
         {
             throw new ArgumentException("Income cannot be negative.");
-        }
-
-        if (deduction < 0)
-        {
-            throw new ArgumentException("Deduction cannot be negative.");
         }
         
         if (string.IsNullOrEmpty(bank))
@@ -41,25 +36,7 @@ public class TaxCalculator
         {
             return 0; // Special deal for the bank
         }
-
-        income = ApplyDeduction(income, deduction);
-
-        return CalculateTax(income);
-    }
-    
-    private bool HasBankDeal(string bank, double income)
-    {
-        return bank == "Eastpac" && income.Equals(EastpacDealValue);
-    }
-    
-    private double ApplyDeduction(double income, double deduction)
-    {
-        income -= deduction;
-        return income < 0 ? 0 : income;
-    }
-
-    private double CalculateTax(double income)
-    {
+        
         double tax = 0;
 
         if (income <= 14000)
@@ -68,18 +45,23 @@ public class TaxCalculator
         }
         else if (income <= 48000)
         {
-            tax = (14000 * TaxRate1) + ((income - 14000) * TaxRate2);
+            tax =  (income) * TaxRate2;
         }
         else if (income <= 70000)
         {
-            tax = (14000 * TaxRate1) + ((48000 - 14000) * TaxRate2) + ((income - 48000) * TaxRate3);
+            tax = (income - 48000) * TaxRate3;
         }
         else
         {
-            tax = (14000 * TaxRate1) + ((48000 - 14000) * TaxRate2) + ((70000 - 48000) * TaxRate3) + ((income - 70000) * TaxRate4);
+            tax = (income - 70000) * TaxRate4;
         }
 
         return tax;
+    }
+    
+    private bool HasBankDeal(string bank, double income)
+    {
+        return bank == "Eastpac" && income.Equals(EastpacDealValue);
     }
 
     public double CalculateStudentLoan(double income)
