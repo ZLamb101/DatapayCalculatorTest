@@ -49,11 +49,11 @@ public class TaxCalculator
         }
         else if (income <= 70000)
         {
-            tax = (income - 48000) * TaxRate3;
+            tax = (income) * TaxRate3;
         }
         else
         {
-            tax = (income - 70000) * TaxRate4;
+            tax = (income) * TaxRate4;
         }
 
         return tax;
