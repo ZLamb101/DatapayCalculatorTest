@@ -7,7 +7,7 @@ Assuming this is a new project, you have been tasked with implementing the first
 - **Readability:** Keep the tests straightforward and easy to read, focusing on specific functionalities without unnecessary complexity.
 
 ## Description
-The `TaxCalculator` class is designed to calculate PAYE (Pay As You Earn) tax, student loan repayments, and KiwiSaver contributions based on the provided income. The class handles various edge cases and provides accurate calculations. It also includes special handling for specific bank deals. Notably, PAYE is calculated after any deductions are applied to the income.
+The `TaxCalculator` class is designed to calculate tax, student loan repayments, and KiwiSaver contributions based on the provided income. The class handles various edge cases and provides accurate calculations.
 
 ## Acceptance Criteria
 
