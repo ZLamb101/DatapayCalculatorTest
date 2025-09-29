@@ -14,27 +14,11 @@ public class TaxCalculator
     private const double StudentLoanRate = 0.12; // 12%
     private const double StudentLoanThreshold = 4000; // Maximum student loan repayment
 
-    // KiwiSaver contribution rate
-    private const double KiwiSaverRate = 0.03; // 3%
-
-    // Special deal value for Eastpac
-    private const double EastpacDealValue = 100000;
-
-    public double CalculateTax(double income, string bank)
+    public double CalculateTax(double income)
     {
         if (income < 0)
         {
             throw new ArgumentException("Income cannot be negative.");
-        }
-        
-        if (string.IsNullOrEmpty(bank))
-        {
-            throw new ArgumentException("Bank cannot be null or empty.");
-        }
-
-        if (HasBankDeal(bank, income))
-        {
-            return 0; // Special deal for the bank
         }
         
         double tax = 0;
@@ -43,7 +27,7 @@ public class TaxCalculator
         {
             tax = income * TaxRate1;
         }
-        else if (income <= 48000)
+        else if (income <= 47000)
         {
             tax =  (income) * TaxRate2;
         }
@@ -58,11 +42,6 @@ public class TaxCalculator
 
         return tax;
     }
-    
-    private bool HasBankDeal(string bank, double income)
-    {
-        return bank == "Eastpac" && income.Equals(EastpacDealValue);
-    }
 
     public double CalculateStudentLoan(double income)
     {
@@ -73,15 +52,5 @@ public class TaxCalculator
 
         double studentLoan = income * StudentLoanRate;
         return studentLoan > StudentLoanThreshold ? StudentLoanThreshold : studentLoan;
-    }
-
-    public double CalculateKiwiSaver(double income)
-    {
-        if (income < 0)
-        {
-            throw new ArgumentException("Income cannot be negative.");
-        }
-
-        return income * KiwiSaverRate;
     }
 }
